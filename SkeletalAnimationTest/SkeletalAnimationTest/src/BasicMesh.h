@@ -3,6 +3,8 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+#define GLFW_INCLUDE_NONE
+#include <GLFW/glfw3.h>
 #include <glad/glad.h>
 #include <string>
 #include <vector>
@@ -12,12 +14,14 @@ class BasicMesh
 public:
 	BasicMesh() {};
 
-	//~BasicMesh();
+	~BasicMesh();
 
 	// Top level entry point for loading process.
 	bool LoadMesh(const std::string& filename);
 
 private:
+
+	void Clear();
 
 	void InitFromScene(const aiScene* pScene, const std::string& Filename);
 
@@ -29,6 +33,12 @@ private:
 
 	// Populate vector with vertex and index data.
 	void InitSingleMesh(const aiMesh* paiMesh);
+
+	void ParseMeshBones(unsigned int index, const aiMesh* paiMesh);
+
+	void ParseSingleBone(unsigned int index, unsigned int meshIndex, const aiBone* pBone);
+
+	//bool InitMaterials(const aiScene* pScene, const std::string filename);
 
 	// Content of m_buffer.
 	enum BUFFER_TYPE {
@@ -44,18 +54,27 @@ private:
 	GLuint m_VAO = 0;
 	GLuint m_Buffers[NUM_BUFFERS] = { 0 };
 
+	struct Bone {
+
+		std::vector<aiVertexWeight> BoneWeights; // One bone can manipulate multiple vertecies.
+	};
+
 	struct BasicMeshEntry {
 		BasicMeshEntry()
 		{
 			NumIndices = 0;
 			BaseVertex = 0;
-			BaseIndex = 0; // TODO: INVALID__MATERIAL
+			BaseIndex = 0; 
+			MaterialIndex = 0;// TODO: INVALID__MATERIAL
+			NumBones = 0;
 		}
 
 		unsigned int NumIndices;
 		unsigned int BaseVertex;
 		unsigned int BaseIndex;
 		unsigned int MaterialIndex;
+		unsigned int NumBones;
+		std::vector<Bone> Bones;
 	};
 
 	std::vector<BasicMeshEntry> m_Meshes;
