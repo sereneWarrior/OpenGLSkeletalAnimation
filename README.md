@@ -29,7 +29,8 @@ Snippet of the current output
  65: vertex id 48 weight 0.14
 ```
 Input file in Blender:
-![alt text](images/testObj.jpg)
+
+![alt text](images/testObj.JPG)
 
 ## Setting up OpenGL & assimp
 See:
