@@ -153,22 +153,18 @@ void BasicMesh::InitSingleMesh(const aiMesh* paiMesh)
 void BasicMesh::ParseMeshBones(unsigned int index, const aiMesh* paiMesh)
 {
 	for (unsigned int i = 0; i < paiMesh->mNumBones; i++) {
-		ParseSingleBone(i, index, paiMesh->mBones[i]);
+		ParseSingleBone(i, m_Meshes[index].Bones[i], paiMesh->mBones[i]);
+		//printf(" %d: weight %.2f\n", i, m_Meshes[index].Bones[i].BoneWeights[0].mWeight);
 	}
 }
 
-void BasicMesh::ParseSingleBone(unsigned int index, unsigned int meshIndex, const aiBone* pBone)
+void BasicMesh::ParseSingleBone(unsigned int boneIndex, Bone& bone, const aiBone* pBone)
 {
-	printf(" Bone %d: '%s' num vertices affected by this bone: %d\n", index, pBone->mName.C_Str(), pBone->mNumWeights);
-
-	Bone bone;
+	printf(" Bone %d: '%s' num vertices affected by this bone: %d\n", boneIndex, pBone->mName.C_Str(), pBone->mNumWeights);
 
 	for (unsigned int i = 0; i < pBone->mNumWeights; i++)
 	{
 		bone.BoneWeights.push_back(pBone->mWeights[i]);
 		printf(" %d: vertex id %d weight %.2f\n", i, pBone->mWeights[i].mVertexId, pBone->mWeights[i].mWeight);
 	}
-	// TODO: Use reference of bone?
-	
-	m_Meshes[meshIndex].Bones.push_back(bone);
 }
