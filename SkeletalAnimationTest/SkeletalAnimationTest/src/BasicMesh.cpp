@@ -59,12 +59,15 @@ void BasicMesh::Clear()
 void BasicMesh::InitFromScene(const aiScene* pScene, const std::string& Filename)
 {
 	// Model might be split into sub-components. For each an aiMesh stucture is created.
+	// Adjust m_Meshes size.
 	m_Meshes.resize(pScene->mNumMeshes);
 
 	unsigned int NumVertices = 0;
 	unsigned int NumIndices = 0;
+	unsigned int NumBones = 0;
 
-	CountVerticesAndIndices(pScene, NumVertices, NumIndices);
+	// Start filling m_Meshes.
+	CountVerticesAndIndices(pScene, NumVertices, NumIndices, NumBones);
 
 	ReserveSpace(NumVertices, NumIndices);
 
@@ -74,10 +77,8 @@ void BasicMesh::InitFromScene(const aiScene* pScene, const std::string& Filename
 	//if (!InitMaterials(pScene, filename)) return false;
 }
 
-void BasicMesh::CountVerticesAndIndices(const aiScene* pScene, unsigned int& numVertices, unsigned int& numIndeces)
+void BasicMesh::CountVerticesAndIndices(const aiScene* pScene, unsigned int& numVertices, unsigned int& numIndeces, unsigned int& numBones)
 {
-	// TODO: Add to signature.
-	unsigned int numBones = 0;
 	// Read mesh data.
 	for (unsigned int i = 0; i < m_Meshes.size(); i++)
 	{
@@ -87,7 +88,7 @@ void BasicMesh::CountVerticesAndIndices(const aiScene* pScene, unsigned int& num
 		m_Meshes[i].MaterialIndex = numIndeces;
 		m_Meshes[i].NumBones = pScene->mMeshes[i]->mNumBones ;
 
-		printf(" Mesh %d : VERTICES %d INDICES %d BONES %d \n\n", i, m_Meshes[i].BaseVertex, m_Meshes[i].NumIndices, m_Meshes[i].Bones);
+		printf(" Mesh %d : VERTICES %d INDICES %d BONES %d \n\n", i, m_Meshes[i].BaseVertex, m_Meshes[i].NumIndices, m_Meshes[i].NumBones);
 		numVertices += pScene->mMeshes[i]->mNumVertices;
 		numIndeces += m_Meshes[i].NumIndices;
 		numBones += m_Meshes[i].NumBones;

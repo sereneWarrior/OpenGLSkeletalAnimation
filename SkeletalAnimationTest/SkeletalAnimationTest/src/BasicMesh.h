@@ -25,7 +25,7 @@ private:
 
 	void InitFromScene(const aiScene* pScene, const std::string& Filename);
 
-	void CountVerticesAndIndices(const aiScene* pScene, unsigned int& numVertices, unsigned int& numIndeces);
+	void CountVerticesAndIndices(const aiScene* pScene, unsigned int& numVertices, unsigned int& numIndeces, unsigned int& numBones);
 
 	void ReserveSpace(unsigned int& numVertices, unsigned int& numIndeces);
 
@@ -59,6 +59,7 @@ private:
 		std::vector<aiVertexWeight> BoneWeights; // One bone can manipulate multiple vertecies.
 	};
 
+	
 	struct BasicMeshEntry {
 		BasicMeshEntry()
 		{
