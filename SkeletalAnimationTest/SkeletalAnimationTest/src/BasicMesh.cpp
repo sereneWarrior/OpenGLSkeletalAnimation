@@ -67,7 +67,7 @@ void BasicMesh::InitFromScene(const aiScene* pScene, const std::string& Filename
 	unsigned int NumBones = 0;
 
 	// Start filling m_Meshes.
-	CountVerticesAndIndices(pScene, NumVertices, NumIndices, NumBones);
+	SetMeshData(pScene, NumVertices, NumIndices, NumBones);
 
 	ReserveSpace(NumVertices, NumIndices);
 
@@ -77,7 +77,8 @@ void BasicMesh::InitFromScene(const aiScene* pScene, const std::string& Filename
 	//if (!InitMaterials(pScene, filename)) return false;
 }
 
-void BasicMesh::CountVerticesAndIndices(const aiScene* pScene, unsigned int& numVertices, unsigned int& numIndeces, unsigned int& numBones)
+// Set Index, Vertex and Bone data for each Mesh from the given file.
+void BasicMesh::SetMeshData(const aiScene* pScene, unsigned int& numVertices, unsigned int& numIndeces, unsigned int& numBones)
 {
 	// Read mesh data.
 	for (unsigned int i = 0; i < m_Meshes.size(); i++)
@@ -94,7 +95,7 @@ void BasicMesh::CountVerticesAndIndices(const aiScene* pScene, unsigned int& num
 		numBones += m_Meshes[i].NumBones;
 
 		if (pScene->mMeshes[i]->HasBones()) {
-			// TODO: Resize Bone vector.
+			m_Meshes[i].Bones.resize(pScene->mMeshes[i]->mNumBones);
 			ParseMeshBones(i, pScene->mMeshes[i]);
 		}
 	}
